@@ -1,0 +1,18 @@
+# $Id: TestEm4.in 75839 2013-11-06 17:27:26Z gcosmo $
+#
+# Macro file for "TestEm4.cc"
+# 
+# (can be run in batch, without graphic)
+#
+#/control/verbose  2
+#/run/verbose 2
+#
+/run/printProgress 1
+#
+/control/alias name OutFile
+/control/alias seed1 2
+/control/alias seed2 2
+/random/setSeeds {seed1} {seed2}
+
+/analysis/setFileName {name}{seed1}_{seed2}x1
+/run/beamOn 100
