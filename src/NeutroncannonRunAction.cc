@@ -139,8 +139,8 @@ void NeutroncannonRunAction::BeginOfRunAction(const G4Run*)
   //
   G4String fileName = analysisManager->GetFileName();
   if(fileName == ""){
-       //fileName = "/media/dataDisk/datiTesi/OutFile.root";
-       fileName = "OutFile.root";
+       fileName = "/media/dataDisk/datiTesi/TPC/OutFile.root";
+       //fileName = "OutFile.root";
   }
 
   analysisManager->OpenFile(fileName);

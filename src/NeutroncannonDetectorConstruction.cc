@@ -562,8 +562,19 @@ nosecoverLogicalVolume -> SetVisAttributes(grayFe);
 
 //material (From DS geant4)
   // Liquid Argon
-  density      = 1.40*g/cm3;
-  temperature  = 87*kelvin;
+  G4String  name,
+            symbol;
+  G4int     z,
+            ncomponents,
+            natoms;
+  G4double  a,
+            fractionmass,
+            pressure;
+
+
+  G4Element* Ar = new G4Element(name="Argon",     symbol="Ar", z=18, a=39.948*g/mole  );
+  G4double density      = 1.40*g/cm3;
+  G4double temperature  = 87*kelvin;
   G4Material *LiquidArgon = new G4Material(name="LiquidArgon",density,ncomponents=1,kStateLiquid, temperature);
   LiquidArgon->AddElement(Ar,1.0);
 
@@ -571,11 +582,11 @@ G4double r_tpc = 5.*cm;
 G4double h_tpc = 5.*cm;
 G4double z_tpc = 80.*cm;
 
-G4Tubs* TPC_Fill = new G4Tubs(“TPC_Fill”, 0, r_tpc, h_tpc*0.5, 0, 2*M_PI);  // r: 0 -> r_tpc
+G4Tubs* TPC_Fill = new G4Tubs("TPC_Fill", 0, r_tpc, h_tpc*0.5, 0, 2*M_PI);  // r: 0 -> r_tpc
 									    // z: -h/2 -> h/2
 									   // phi: 0 -> 2 pi
-TPC_FillLogicalVolume = new G4LogicalVolume(TPC_Fill,LiquidArgon,"TPC_Fill", 0, 0, 0);
-TPC_FillPhysicalVolume = new G4PVPlacement( 0,G4ThreeVector(0.*cm, 0*cm, z_tpc),"TPC_Fill",TPC_FillLogicalVolume,physicalRoom,false,0);
+G4LogicalVolume *TPC_FillLogicalVolume = new G4LogicalVolume(TPC_Fill,LiquidArgon,"TPC_Fill", 0, 0, 0);
+G4PVPlacement *TPC_FillPhysicalVolume = new G4PVPlacement( 0,G4ThreeVector(0.*cm, 0*cm, z_tpc),"TPC_Fill",TPC_FillLogicalVolume,physicalRoom,false,0);
 
 TPC_FillLogicalVolume -> SetVisAttributes(graytrans);
 
