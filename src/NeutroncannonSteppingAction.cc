@@ -6,7 +6,6 @@
 #include "G4SteppingManager.hh"
 #include "G4RunManager.hh"
 #include "NeutroncannonAnalysis.hh"
-//#include "G4ELINP_DetectorConstruction_NRSS.hh"
 #include "NeutroncannonPrimaryGeneratorAction.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4UImanager.hh"
@@ -44,6 +43,9 @@ if (recordyes ==1){
 			analysisManager->FillNtupleDColumn(0,0,energy);
 			analysisManager->AddNtupleRow(0);
 			//analysisManager->FillH1(0,energy);
+			//Inserire qui info su neutroni alla TPC
+			
+
 		}	
 	}
 //////////////////////////verifica numero di gamma prodotti ed energie
