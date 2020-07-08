@@ -1,5 +1,4 @@
 
-
 #include "NeutroncannonEventAction.hh"
 #include "NeutroncannonAnalysis.hh"
 
@@ -33,15 +32,8 @@ void NeutroncannonEventAction::BeginOfEventAction( const G4Event* anEvent)
     i++;
     std::cout << "StartEvent " << i << std::endl;
 
-    G4double fEnergyDep = 0;
+        this->clearEvent();
     
-    //inizializzare tutti i verrori evento per evento 
-    // for(int i=0; i < fDetectorEnergyDep.size(); i++)
-        this->clearDetectorEdepL1();
-        this->clearDetectorEdepL2();
-        this->clearDetectorEdepL3();
-        this->clearDetectorEdepL4();
-        this->clearDetectorEdeptot();
 }
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,31 +43,23 @@ void NeutroncannonEventAction::EndOfEventAction( const G4Event* anEvent)
 
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-        if (fDetectorEnergyDepL1 > 0.001){
-            analysisManager->FillNtupleDColumn(11,0,fDetectorEnergyDepL1);
-            analysisManager->AddNtupleRow(11);
-        }
-        if (fDetectorEnergyDepL2 > 0.001){
-            analysisManager->FillNtupleDColumn(12,0,fDetectorEnergyDepL2);
-            analysisManager->AddNtupleRow(12);
-        }    
-        if (fDetectorEnergyDepL3 > 0.001){
-            analysisManager->FillNtupleDColumn(13,0,fDetectorEnergyDepL3);
-            analysisManager->AddNtupleRow(13);
-        } 
-        if (fDetectorEnergyDepL4 > 0.001){
-            analysisManager->FillNtupleDColumn(14,0,fDetectorEnergyDepL4);
-            analysisManager->AddNtupleRow(14);
-        } 
-        //totale
-        if (fDetectorEnergyDep > 0.001){
-            analysisManager->FillNtupleDColumn(15,0,fDetectorEnergyDep);
-            analysisManager->AddNtupleRow(15);
-        } 
-        
-        //G4cout << fDetectorEnergyDepL2 << G4endl;
-        
-        
+
+
+        analysisManager->FillNtupleIColumn(0,0,i);     
+        analysisManager->FillNtupleIColumn(0,1,this->getGenNeutrons());      
+        analysisManager->FillNtupleIColumn(0,2,this->getGenGammas());        
+        analysisManager->FillNtupleIColumn(0,3,this->getInGunNeutrons());    
+        analysisManager->FillNtupleIColumn(0,4,this->getInGunGammas());      
+        analysisManager->FillNtupleIColumn(0,5,this->getOutGunNeutrons());   
+        analysisManager->FillNtupleIColumn(0,6,this->getOutGunGammas());      
+        analysisManager->FillNtupleIColumn(0,7,this->getTPCNeutrons());      
+        analysisManager->FillNtupleIColumn(0,8,this->getTPCGammas());          
+        analysisManager->FillNtupleIColumn(0,9,this->getTPCNHits());         
+        analysisManager->FillNtupleIColumn(0,10,this->getTPCGHits());         
+        analysisManager->FillNtupleIColumn(0,11,this->getBaFNeutrons());      
+        analysisManager->FillNtupleIColumn(0,12,this->getBaFGammas());  
+
+        analysisManager->AddNtupleRow(0);
         
         
     std::cout << "EndEvent " << i << std::endl;

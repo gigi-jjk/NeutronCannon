@@ -19,46 +19,66 @@ class NeutroncannonEventAction : public G4UserEventAction
     virtual void BeginOfEventAction(const G4Event* anEvent);
     virtual void   EndOfEventAction(const G4Event* anEvent);
   
-    //Funzioni utili e variabili utili
-    void addDetectorEdepL1( G4double Edep)     {fDetectorEnergyDepL1 += Edep;}
-    void addDetectorEdepL2( G4double Edep)     {fDetectorEnergyDepL2 += Edep;}
-    void addDetectorEdepL3( G4double Edep)     {fDetectorEnergyDepL3 += Edep;}
-    void addDetectorEdepL4( G4double Edep)     {fDetectorEnergyDepL4 += Edep;}
-    void addDetectorEdeptot( G4double Edep)     {fDetectorEnergyDep += Edep;}
-    //void addChcount(int nDetector, G4int fCerenkovCounterL)     {fChcount[nDetector] += fCerenkovCounterL;}
-    //void addDetectorNh(int nDetector, G4int fNhcount) {fNh[nDetector] += fNhcount;}
-    G4double GetDetectorEnergyDepositL1()  const   {return fDetectorEnergyDepL1;}
-    G4double GetDetectorEnergyDepositL2()  const   {return fDetectorEnergyDepL2;}
-    G4double GetDetectorEnergyDepositL3()  const   {return fDetectorEnergyDepL3;}
-    G4double GetDetectorEnergyDepositL4()  const   {return fDetectorEnergyDepL4;}
-    G4double GetDetectorEnergyDeposittot()  const   {return fDetectorEnergyDep;}
-    //G4int GetDetectorChcount(int nDetector)  const   {return fChcount[nDetector];}
-    //G4int GetDetectorNh(int nDetector)  const   {return fNh[nDetector];}
-   // void clearDetectorEdep(int nDetector) {fDetectorEnergyDep[nDetector] = 0.;}
-    //void clearChcount(int nDetector) {fChcount[nDetector] = 0;}
-    //void clearNh(int nDetector) {fNh[nDetector] = 0;}
+    //counting
 
-    G4int i = 0;
+  void addGenNeutrons(){fGenNeutrons+=1;}      
+  void addGenGammas(){fGenGammas+=1;}        
+  void addInGunNeutrons(){fInGunNeutrons+=1;}    
+  void addInGunGammas(){fInGunGammas+=1;}      
+  void addOutGunNeutrons(){fOutGunNeutrons+=1;}   
+  void addOutGunGammas(){fOutGunGammas+=1;}      
+  void addTPCNeutrons(){fTPCNeutrons+=1;}      
+  void addTPCGammas(){fTPCGammas+=1;}          
+  void addTPCNHits(){fTPCNHits+=1;}         
+  void addTPCGHits(){fTPCGHits+=1;}         
+  void addBaFNeutrons(){fBaFNeutrons+=1;}      
+  void addBaFGammas(){fBaFGammas+=1;}
+
+
+  G4int getGenNeutrons(){return fGenNeutrons;}      
+  G4int getGenGammas(){return fGenGammas;}        
+  G4int getInGunNeutrons(){return fInGunNeutrons;}    
+  G4int getInGunGammas(){return fInGunGammas;}      
+  G4int getOutGunNeutrons(){return fOutGunNeutrons;}   
+  G4int getOutGunGammas(){return fOutGunGammas;}      
+  G4int getTPCNeutrons(){return fTPCNeutrons;}      
+  G4int getTPCGammas(){return fTPCGammas;}          
+  G4int getTPCNHits(){return fTPCNHits;}         
+  G4int getTPCGHits(){return fTPCGHits;}         
+  G4int getBaFNeutrons(){return fBaFNeutrons;}      
+  G4int getBaFGammas(){return fBaFGammas;}
     
-
+  G4int i = 0;
   
-  void clearDetectorEdepL1() {fDetectorEnergyDepL1 = 0.;}
-  void clearDetectorEdepL2() {fDetectorEnergyDepL2 = 0.;}
-  void clearDetectorEdepL3() {fDetectorEnergyDepL3 = 0.;}
-  void clearDetectorEdepL4() {fDetectorEnergyDepL4 = 0.;}
-  void clearDetectorEdeptot() {fDetectorEnergyDep = 0.;}
-  private:
-    //std::vector<G4double> fDetectorEnergyDep;   // Energy deposited in the detector
-    G4double fDetectorEnergyDep;
-    G4double fDetectorEnergyDepL1;
-    G4double fDetectorEnergyDepL2;
-    G4double fDetectorEnergyDepL3;
-    G4double fDetectorEnergyDepL4;
-    
-    //std::vector<G4int> fChcount;   // Energy deposited in the detector
-    //std::vector<G4int> fNh;   // Energy deposited in the detector
-    
+  void clearEvent(){   
+    fGenNeutrons = 0;     
+    fGenGammas = 0;        
+    fInGunNeutrons = 0;    
+    fInGunGammas = 0;      
+    fOutGunNeutrons = 0;   
+    fOutGunGammas = 0;      
+    fTPCNeutrons = 0;      
+    fTPCGammas = 0;          
+    fTPCNHits = 0;         
+    fTPCGHits = 0;         
+    fBaFNeutrons = 0;      
+    fBaFGammas = 0;  
+  }
 
+  private:
+  G4int fGenNeutrons;      
+  G4int fGenGammas;        
+  G4int fInGunNeutrons;    
+  G4int fInGunGammas;      
+  G4int fOutGunNeutrons;   
+  G4int fOutGunGammas;      
+  G4int fTPCNeutrons;      
+  G4int fTPCGammas;          
+  G4int fTPCNHits;         
+  G4int fTPCGHits;         
+  G4int fBaFNeutrons;      
+  G4int fBaFGammas;  
+     
 
 };
 
