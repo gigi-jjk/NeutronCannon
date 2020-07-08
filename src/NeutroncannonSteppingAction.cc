@@ -37,13 +37,26 @@ void NeutroncannonSteppingAction::UserSteppingAction(const G4Step* aStep)
 		if((aStep->GetTrack()->GetCurrentStepNumber() == 1) && (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()== "Tube_source")){
 			fEventAction->addGenNeutrons();
 			}
-
+		//neutrons entering the TPC
+		if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()== "TPC_Fill"){
+			if(aStep->GetPreStepPoint()->GetStepStatus()==fGeomBoundary)
+					fEventAction->addTPCNeutrons();
+			else
+					fEventAction->addTPCNHits();		//scattering inside tpc
+			}
 	}
 //////////////////////// Info about gammas
 	if ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "gamma")){
 		if((aStep->GetTrack()->GetCurrentStepNumber() == 1) && (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()== "Tube_source")){
 				fEventAction->addGenGammas();
 				}	
+		if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()== "TPC_Fill" ){
+			if(aStep->GetPreStepPoint()->GetStepStatus()==fGeomBoundary)
+					fEventAction->addTPCGammas();
+			else
+					fEventAction->addTPCGHits();		//scattering inside tpc
+			}
+
 	}	
 	
 ///////////////////////////////////colleziona gamma secondari generati 

@@ -30,7 +30,7 @@ void NeutroncannonEventAction::BeginOfEventAction( const G4Event* anEvent)
 { 
     //initializations
     i++;
-    std::cout << "StartEvent " << i << std::endl;
+    if (i%100==0) std::cout << "StartEvent " << i << std::endl;
 
         this->clearEvent();
     
@@ -62,7 +62,7 @@ void NeutroncannonEventAction::EndOfEventAction( const G4Event* anEvent)
         analysisManager->AddNtupleRow(0);
         
         
-    std::cout << "EndEvent " << i << std::endl;
+    //std::cout << "EndEvent " << i << std::endl;
 
 
 }

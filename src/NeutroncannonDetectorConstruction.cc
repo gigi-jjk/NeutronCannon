@@ -92,28 +92,43 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
   	G4double source_z = -3*cm;
 
   	//Lead source collimator
-  	G4double lc_dim_x = 20*cm;
-  	G4double lc_dim_y = 20*cm;
+  	G4double lc_dim_x = 25*cm;
+  	G4double lc_dim_y = 25*cm;
   	G4double lc_dim_z = 8*cm;
-	  G4double lc_hole_x = 9.5*cm;
-  	G4double lc_hole_y = 9.5*cm;
-  	G4double lc_hole_z = 10*cm;
+	  G4double lc_hole_x = 15*cm;
+  	G4double lc_hole_y = 15*cm;
+  	G4double lc_hole_z = 8.1*cm;
+
 
 
   	G4double lc_x , lc_y = 0*cm;
   	G4double lc_z = -4*cm;
+    //Surrounding HDPe
+    G4double pc_dim_x = 14.98*cm;
+    G4double pc_dim_y = 14.98*cm;
+    G4double pc_dim_z = 8*cm;
+    G4double pc_hole_x = 5*cm;
+    G4double pc_hole_y = 5*cm;
+    G4double pc_hole_z = 8.1*cm;  
+
 
 	//cone hole
   	G4double Rmin1Coll_fixed = 0*mm;
   	G4double Rmax1Coll_fixed = 5.*mm;
   	G4double Rmin2Coll_fixed = 0*mm;
   	G4double Rmax2Coll_fixed = 5.*cm;
-  	G4double hightColl_fixed = 32.5*cm;//66*cm
+  	G4double hightColl_fixed = 32.5*cm;
 
   	G4double cone_x, cone_y = 0*cm;
   	G4double cone_z = 30*cm;
 
   	//detector
+    G4double det_Rmin = 12.5*mm;
+    G4double det_Rmax = 19.*mm;
+    G4double det_h = 30*mm;
+
+    G4double det_x, det_y = 0*cm;
+    G4double det_z = -lc_hole_z-lc_z/2;    
 
 
   	//hdpe and lead
@@ -130,10 +145,12 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
   	G4double c_back_offset = -30.*cm;
   	G4double c_front_offset =  0.*cm;
 
+    G4double c0_dim_x = 25.*cm;
   	G4double c1_dim_x = 35.*cm;
   	G4double c2_dim_x = 45.*cm;
   	G4double c3_dim_x = 55.*cm;
   	G4double c4_dim_x = 55.8*cm;
+    G4double c0_dim_y = 25.*cm;
 	  G4double c1_dim_y = 35.*cm;
   	G4double c2_dim_y = 45.*cm;
   	G4double c3_dim_y = 55.*cm;
@@ -153,7 +170,8 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
   	//LAr TPC
     G4double d_tpc = 5.*cm;   //diameter
 	  G4double h_tpc = 5.*cm;    //h
-	  G4double z_tpc = 65.*cm;
+	  G4double z_tpc = 50.*cm;
+
 
 
     //VIS ATTRIBUTES
@@ -171,6 +189,11 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
    lightblue -> SetVisibility(true);
    lightblue -> SetForceSolid(true);
 
+   G4VisAttributes * lightyellow = new G4VisAttributes(G4Colour(0.9 ,0.9 ,0.3));
+   lightyellow -> SetVisibility(true);
+   lightyellow -> SetForceSolid(true);
+
+
    G4VisAttributes * graytrans = new G4VisAttributes(G4Colour(0.3 ,0.3 ,0.3));
    graytrans -> SetVisibility(true);
 
@@ -183,7 +206,8 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
     G4RotationMatrix* rotationMatrix2 = new G4RotationMatrix();
     rotationMatrix2->rotateX(90.*deg);
 
-
+    G4RotationMatrix* rotationMatrix3 = new G4RotationMatrix();
+    rotationMatrix3->rotateX(180.*deg);
 
 
 
@@ -209,18 +233,37 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
     hole_square_air = new G4Box("foro quadrato",lc_hole_x/2, lc_hole_y/2, lc_hole_z/2);
   	G4VSolid*collimator= new G4SubtractionSolid("piombo-buco", collimator_Pb, hole_square_air,0, G4ThreeVector(0.,0.,0.*cm));
   
-  	logiccollimator = new G4LogicalVolume(collimator,Pb,"collimator",0,0,0);
+  	logiccollimator = new G4LogicalVolume(collimator,hdpe,"collimator",0,0,0);
   	physicollimator = new G4PVPlacement(0,positionColl_Pb,logiccollimator,"collimator",logicRoom,false,0);
 
-  	logiccollimator -> SetVisAttributes(redtrans);
+  	logiccollimator -> SetVisAttributes(graytrans);
+//Surrounding HDPe
+    G4ThreeVector positionColl_Pe = G4ThreeVector(lc_x,lc_y,lc_z);  
+    G4Box* collimator_Pe = new G4Box("collimator_Pe",pc_dim_x/2., pc_dim_y/2., pc_dim_z/2.);
+    G4Box* hole_square_Pe = new G4Box("foro quadrato Pe",pc_hole_x/2, pc_hole_y/2, pc_hole_z/2);
+    G4VSolid* collimatorPe= new G4SubtractionSolid("piombo-buco Pe", collimator_Pe, hole_square_Pe,0, G4ThreeVector(0.,0.,0.*cm));
+  
+    G4LogicalVolume* logiccollimatorPe = new G4LogicalVolume(collimatorPe,Pb,"collimatorPe",0,0,0);
+    G4PVPlacement* physicollimatorPe = new G4PVPlacement(0,positionColl_Pe,"coll_Pe",logiccollimatorPe,physicalRoom,false,0);
+
+    logiccollimatorPe -> SetVisAttributes(redtrans);
+
 
 //conic hole
 	G4ThreeVector hole_position = G4ThreeVector(cone_x,cone_y,cone_z);//30.6
 	G4Cons* cone_hole = new G4Cons("buco conico",Rmin1Coll_fixed,Rmax1Coll_fixed,Rmin2Coll_fixed,Rmax2Coll_fixed,hightColl_fixed,0*deg,360*deg);
 
+  G4LogicalVolume *conelogic = new G4LogicalVolume(cone_hole,vacuum,"conelogic",0,0,0);
+  G4PVPlacement *conePhysical = new G4PVPlacement(new G4RotationMatrix(),hole_position,"conehole",conelogic,physicalRoom,false,0);
+  conelogic -> SetVisAttributes(lightyellow); 
+
+
 //detector
-
-
+  G4Cons* detectorCone = new G4Cons("detectorCone",0,det_Rmin,0,det_Rmax,det_h/2,0*deg,360*deg);
+  detectorLogicalVolume = new G4LogicalVolume(detectorCone,BaF2,"detector logical", 0, 0, 0);
+  detectorPhysicalVolume = new G4PVPlacement(rotationMatrix3,G4ThreeVector(det_x,det_y,det_z),"detector",detectorLogicalVolume,physicalRoom,false,0);
+  detectorLogicalVolume -> SetVisAttributes(lightblue); 
+ 
 
 //nose covering
     G4Box* d = new G4Box("d1",d_dim_x/2, d_dim_y/2, hdpe_dim_z/2);
@@ -294,8 +337,16 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
 
 
 //front / rear covering (from inner to outer c1,c2,c3,c4) front with holes
-	//c1
- 	G4Box* c1 = new G4Box("c1",c1_dim_x/2, c1_dim_y/2, hdpe_dim_z/2);
+    //innermost back c0
+    G4Box* c0 = new G4Box("c0",c0_dim_x/2, c0_dim_y/2, hdpe_dim_z/2);
+
+    G4LogicalVolume* c0LogicalVolume = new G4LogicalVolume(c0,hdpe,"c0 back", 0, 0, 0);
+    G4PVPlacement* c0PhysicalVolume = new G4PVPlacement( new G4RotationMatrix(),G4ThreeVector(0., 0., c_back_offset+1*hdpe_dim_z/2),"c0 back",c0LogicalVolume,physicalRoom,false,0);//-100.6*cm
+
+    c0LogicalVolume -> SetVisAttributes(graytrans); 
+    
+	  //c1
+ 	  G4Box* c1 = new G4Box("c1",c1_dim_x/2, c1_dim_y/2, hdpe_dim_z/2);
 
     c1LogicalVolume = new G4LogicalVolume(c1,hdpe,"c1 back", 0, 0, 0);
     c1PhysicalVolume = new G4PVPlacement( new G4RotationMatrix(),G4ThreeVector(0., 0., c_back_offset-1*hdpe_dim_z/2),"c1 back",c1LogicalVolume,physicalRoom,false,0);//-100.6*cm
