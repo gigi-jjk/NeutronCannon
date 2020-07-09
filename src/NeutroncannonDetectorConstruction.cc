@@ -48,14 +48,21 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
     //------------------------------------------//
     
     //5% boron loaded HDPE   (c2h4)     polietilene ad alta densità 940 kg/m3
-    G4Element* elH = G4NistManager::Instance()->FindOrBuildElement("H");
-    G4Element* elC = G4NistManager::Instance()->FindOrBuildElement("C");
-    G4Element* elB = G4NistManager::Instance()->FindOrBuildElement("B");
+    G4Element* H = G4NistManager::Instance()->FindOrBuildElement("H");
+    G4Element* C = G4NistManager::Instance()->FindOrBuildElement("C");
+    G4Element* B = G4NistManager::Instance()->FindOrBuildElement("B");
+
+    G4Element* O = G4NistManager::Instance()->FindOrBuildElement("O");
+    G4Element* Si = G4NistManager::Instance()->FindOrBuildElement("Si");
+    G4Element* Ca = G4NistManager::Instance()->FindOrBuildElement("Ca");
+    G4Element* Na = G4NistManager::Instance()->FindOrBuildElement("Na");
+    G4Element* Fe = G4NistManager::Instance()->FindOrBuildElement("Fe");
+
 
     G4Material* hdpe = new G4Material("hdpe", 1.04 * g/cm3, 3 /* components */);
-    hdpe -> AddElement(elH, 13.5 * perCent);
-    hdpe -> AddElement(elC, 81.5 * perCent);
-    hdpe -> AddElement(elB, 5 * perCent);
+    hdpe -> AddElement(H, 13.5 * perCent);
+    hdpe -> AddElement(C, 81.5 * perCent);
+    hdpe -> AddElement(B, 5 * perCent);
    //------------------------------------------//
    //BaF2//    <-----------------------------
    
@@ -76,6 +83,15 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
   	G4double temperature  = 87*kelvin;
   	G4Material *LiquidArgon = new G4Material(name="LiquidArgon",density,ncomponents=1,kStateLiquid, temperature);
   	LiquidArgon->AddElement(Ar,1.0);  
+
+
+    //Concrete
+     G4Material* Concrete = new G4Material("Concrete",2.5*g/cm3,5);
+     Concrete->AddElement(O, fractionmass = 0.52);
+     Concrete->AddElement(Si, fractionmass = 0.325);
+     Concrete->AddElement(Ca, fractionmass = 0.08);
+     Concrete->AddElement(Na, fractionmass = 0.015);
+     Concrete->AddElement(Fe, fractionmass = 0.06);
 
 
 // ----------  SIZES AND POSITIONS---------------------------//
@@ -172,6 +188,12 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
 	  G4double h_tpc = 5.*cm;    //h
 	  G4double z_tpc = 50.*cm;
 
+    //Concrete floor 
+    G4double floor_dim_x = worldX;
+    G4double floor_dim_y = worldY;
+    G4double floor_dim_z = 5*cm;
+
+    G4double floor_pos_y = -70*cm - c4_dim_y/2;
 
 
     //VIS ATTRIBUTES
@@ -185,17 +207,21 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
   G4VisAttributes * redtrans = new G4VisAttributes(G4Colour(0.8 ,0. ,0.));
   redtrans -> SetVisibility(true);
 
-   G4VisAttributes * lightblue = new G4VisAttributes(G4Colour(0.0 ,0.7 ,1.));
-   lightblue -> SetVisibility(true);
-   lightblue -> SetForceSolid(true);
+  G4VisAttributes * lightblue = new G4VisAttributes(G4Colour(0.0 ,0.7 ,1.));
+  lightblue -> SetVisibility(true);
+  lightblue -> SetForceSolid(true);
 
-   G4VisAttributes * lightyellow = new G4VisAttributes(G4Colour(0.9 ,0.9 ,0.3));
-   lightyellow -> SetVisibility(true);
-   lightyellow -> SetForceSolid(true);
+  G4VisAttributes * lightyellow = new G4VisAttributes(G4Colour(0.9 ,0.9 ,0.3));
+  lightyellow -> SetVisibility(true);
+  lightyellow -> SetForceSolid(true);
 
 
-   G4VisAttributes * graytrans = new G4VisAttributes(G4Colour(0.3 ,0.3 ,0.3));
-   graytrans -> SetVisibility(true);
+  G4VisAttributes * graytrans = new G4VisAttributes(G4Colour(0.3 ,0.3 ,0.3));
+  graytrans -> SetVisibility(true);
+
+  G4VisAttributes * concretegray = new G4VisAttributes(G4Colour(0.6 ,0.6 ,0.6));
+  graytrans -> SetVisibility(true);
+
 
 
 
@@ -213,11 +239,19 @@ G4VPhysicalVolume* NeutroncannonDetectorConstruction::Construct()
 
 
 //World
-  	G4Box* Room = new G4Box("Room",worldX,worldY,worldZ);
+  G4Box* Room = new G4Box("Room",worldX,worldY,worldZ);
 	G4LogicalVolume* logicRoom = new G4LogicalVolume(Room, vacuum,"logicRoom", 0,0,0);  //now set to vacuum
 	physicalRoom = new G4PVPlacement(0,G4ThreeVector(),"physicalRoom", logicRoom,0,false,0);
 
 	logicRoom -> SetVisAttributes (G4VisAttributes::GetInvisible());
+
+//Concrete floor
+  G4Box* Floor = new G4Box("Floor",floor_dim_x,floor_dim_y,floor_dim_z);
+  G4LogicalVolume* logicFloor = new G4LogicalVolume(Floor, Concrete,"logicFloor", 0,0,0); 
+  G4PVPlacement* physicalFloor = new G4PVPlacement(rotationMatrix2,G4ThreeVector(0,floor_pos_y,0),"floor",logicFloor,physicalRoom,0,false,0);
+
+  logicFloor -> SetVisAttributes(concretegray);
+
 
 // Cf cylindrical source
 	G4ThreeVector positionTube_source = G4ThreeVector(source_x,source_y,source_z);

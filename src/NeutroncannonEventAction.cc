@@ -56,8 +56,7 @@ void NeutroncannonEventAction::EndOfEventAction( const G4Event* anEvent)
         analysisManager->FillNtupleIColumn(0,8,this->getTPCGammas());          
         analysisManager->FillNtupleIColumn(0,9,this->getTPCNHits());         
         analysisManager->FillNtupleIColumn(0,10,this->getTPCGHits());         
-        analysisManager->FillNtupleIColumn(0,11,this->getBaFNeutrons());      
-        analysisManager->FillNtupleIColumn(0,12,this->getBaFGammas());  
+        analysisManager->FillNtupleIColumn(0,11,this->getBaFEnergy());      
 
         analysisManager->AddNtupleRow(0);
         

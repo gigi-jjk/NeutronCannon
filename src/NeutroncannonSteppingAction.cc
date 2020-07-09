@@ -58,6 +58,14 @@ void NeutroncannonSteppingAction::UserSteppingAction(const G4Step* aStep)
 			}
 
 	}	
+
+////////////////////////BaFEnergy
+	if (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "detector"){
+    G4double Edepstep = (aStep->GetTotalEnergyDeposit()- aStep->GetNonIonizingEnergyDeposit());
+    if (Edepstep > 0.001){
+      fEventAction->addBaFEnergy(Edepstep);
+    }
+  }
 	
 ///////////////////////////////////colleziona gamma secondari generati 
 /*	if ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName() == "gamma")){//screma per particella

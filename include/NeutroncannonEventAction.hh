@@ -31,8 +31,7 @@ class NeutroncannonEventAction : public G4UserEventAction
   void addTPCGammas(){fTPCGammas+=1;}          
   void addTPCNHits(){fTPCNHits+=1;}         
   void addTPCGHits(){fTPCGHits+=1;}         
-  void addBaFNeutrons(){fBaFNeutrons+=1;}      
-  void addBaFGammas(){fBaFGammas+=1;}
+  void addBaFEnergy(G4double Edep){fBaFEnergy+=Edep;}      
 
 
   G4int getGenNeutrons(){return fGenNeutrons;}      
@@ -45,8 +44,7 @@ class NeutroncannonEventAction : public G4UserEventAction
   G4int getTPCGammas(){return fTPCGammas;}          
   G4int getTPCNHits(){return fTPCNHits;}         
   G4int getTPCGHits(){return fTPCGHits;}         
-  G4int getBaFNeutrons(){return fBaFNeutrons;}      
-  G4int getBaFGammas(){return fBaFGammas;}
+  G4double getBaFEnergy(){return fBaFEnergy;}      
     
   G4int i = 0;
   
@@ -61,8 +59,7 @@ class NeutroncannonEventAction : public G4UserEventAction
     fTPCGammas = 0;          
     fTPCNHits = 0;         
     fTPCGHits = 0;         
-    fBaFNeutrons = 0;      
-    fBaFGammas = 0;  
+    fBaFEnergy = 0.;        
   }
 
   private:
@@ -76,9 +73,7 @@ class NeutroncannonEventAction : public G4UserEventAction
   G4int fTPCGammas;          
   G4int fTPCNHits;         
   G4int fTPCGHits;         
-  G4int fBaFNeutrons;      
-  G4int fBaFGammas;  
-     
+  G4int fBaFEnergy;           
 
 };
 

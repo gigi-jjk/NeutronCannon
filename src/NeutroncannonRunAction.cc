@@ -55,8 +55,7 @@ void NeutroncannonRunAction::BeginOfRunAction(const G4Run*)
   analysisManager->CreateNtupleIColumn("TPCGHits");         //10number "Gamma Hits" inside TPC
             //add info about energy, time and direction
   //BaF Trigger detector info
-  analysisManager->CreateNtupleIColumn("BaFNeutrons");      //11 number of neutrons at trigger detector per event
-  analysisManager->CreateNtupleIColumn("BaFGammas");        //12 number of gammas at trigger detector per Event
+  analysisManager->CreateNtupleDColumn("BaFEnergy");      //energy deposited at trigger detector per event
             //add info about energy, time and direction
    
 
